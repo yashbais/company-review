@@ -5,9 +5,14 @@ import { useState } from "react";
 import { Datepicker } from "flowbite-react";
 import { Icon } from "@iconify/react";
 import { addCompany } from "../../store/Apis";
+import {useContext} from 'react'
+import { companyList } from "../../context/context";
 
 
 const AddCompanyModal = ({ setOpenModal, openModal }) => {
+  const contextCompanies = useContext(companyList)
+
+
   const [companyDetails, setCompanyDetails] = useState({
     companyName: "",
     companyFoundedOn: null, 
@@ -23,6 +28,7 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
       location: "",
       city: "",
     });
+    
   }
 
   const handleChange = (e) => {

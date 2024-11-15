@@ -9,6 +9,7 @@ import AddReviewModal from "./Modals/AddReviewModal";
 const CompanyDetail = () => {
   const { companyId } = useParams();
 
+  
   const [company, setCompany] = useState({});
   const [averageRating, setAverageRating] = useState(0);
   const [openModal, setOpenModal] = useState(false);
