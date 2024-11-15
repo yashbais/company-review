@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import AddCompanyModal from "./Modals/AddCompanyModal";
 
-const CityFilterBar = () => {
+const CityFilterBar = ({openModal, setOpenModal}) => {
   const [selectedSort, setSelectedSort] = useState("Name");
-  const [openModal, setOpenModal] = useState(false);
 
   const handleSortChange = (e) => {
     setSelectedSort(e.target.value);
@@ -111,6 +110,7 @@ const CityFilterBar = () => {
           </div>
         </div>
       </div>
+
       <AddCompanyModal setOpenModal={setOpenModal} openModal={openModal} />
     </>
   );

@@ -2,8 +2,11 @@
 
 import { Button, Label, Modal, TextInput, Textarea } from "flowbite-react";
 import { useState } from "react";
+import { Icon } from "@iconify/react";
+import { addReview } from "../../store/Apis";
 
-const AddReviewModal = ({ setOpenModal, openModal }) => {
+
+const AddReviewModal = ({ setOpenModal, openModal,companyId }) => {
   const [review, setReview] = useState({
     fullName: "",
     subject: "",
@@ -17,12 +20,42 @@ const AddReviewModal = ({ setOpenModal, openModal }) => {
       fullName: "",
       subject: "",
       reviewText: "",
-      rating: "",
+      rating: 0,
     });
   }
 
   const handleChange = (e) => {
     setReview({ ...review, [e.target.name]: e.target.value });
+  };
+
+  const handleStarClick = (index) => {
+    setReview({...review, rating : index + 1}); // Set the rating to the clicked star's index (1-based index)
+  };
+
+  const addReviewApi = async ()=>{
+    await addReview({...review, companyId})
+    onCloseModal();
+  }
+
+  const renderStars = () => {
+    return Array.from({ length: 5 }, (_, index) => {
+      // Check if the current star should be filled
+      const isFilled = index < review.rating; // If index is less than rating, the star is filled
+
+      return (
+        <div
+          key={index}
+          onClick={() => handleStarClick(index)}
+          style={{ cursor: "pointer", display: "inline-block" }}
+        >
+          {isFilled ? (
+            <Icon icon="typcn:star-full-outline" style={{ color: "#d1b93d" }} />
+          ) : (
+            <Icon icon="lineicons:star-fat" style={{ color: "#d1b93d" }} />
+          )}
+        </div>
+      );
+    });
   };
 
   return (
@@ -42,7 +75,7 @@ const AddReviewModal = ({ setOpenModal, openModal }) => {
             />
           </div>
         </Modal.Header>
-        <div className="w-full  flex items-center justify-center mb-4">
+        <div className="w-full  flex items-center justify-center ">
           <h3 className="text-2xl font-bold text-gray-900 text-center">
             Add Review
           </h3>
@@ -100,16 +133,19 @@ const AddReviewModal = ({ setOpenModal, openModal }) => {
             </div>
 
             <div>
-              <p className="text-xl font-semibold">Rating</p>
+              <p className="text-xl font-semibold mb-1">Rating</p>
+              <div className="text-4xl">{renderStars()}</div>
             </div>
+
 
             <div className="flex justify-center py-4">
               <Button
-              className="text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-4 py-2 flex items-center gap-1 w-full sm:w-auto "
+              className="h-9 text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-4 py-2 flex items-center gap-1 w-full sm:w-auto "
               onClick={() => {
-                  // Save logic
-                  console.log(review);
-                  onCloseModal();
+               
+                  addReviewApi()
+                
+
                 }}
               >
                 Save

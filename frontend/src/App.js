@@ -2,6 +2,7 @@
 import CompanySection from './components/CompanySection.jsx'
 
 function App() {
+
   return (
     <div>
       <CompanySection />

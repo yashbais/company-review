@@ -4,12 +4,13 @@ import { Button, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Datepicker } from "flowbite-react";
 import { Icon } from "@iconify/react";
+import { addCompany } from "../../store/Apis";
 
 
 const AddCompanyModal = ({ setOpenModal, openModal }) => {
   const [companyDetails, setCompanyDetails] = useState({
     companyName: "",
-    companyFoundedOn: null, // Use null for date to handle Datepicker
+    companyFoundedOn: null, 
     location: "",
     city: "",
   });
@@ -32,10 +33,14 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
     setCompanyDetails({ ...companyDetails, companyFoundedOn: date });
   };
 
+  const addCompanyApi = async ()=>{
+    await addCompany({...companyDetails})
+    onCloseModal();
+  }
+
   return (
     <>
-      <Modal show={openModal} size="lg" onClose={onCloseModal} popup >
-        
+      <Modal show={openModal} size="lg" onClose={onCloseModal} popup>
         <Modal.Header className="-p-2 ">
           <div className="relative overflow-hidden flex items-center justify-center rounded-lg">
             <img
@@ -53,13 +58,12 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
 
         <div className="w-full  flex items-center justify-center mb-4">
           <h3 className="text-2xl font-bold text-gray-900 text-center">
-          Add Company
+            Add Company
           </h3>
         </div>
 
         <Modal.Body>
           <div className="space-y-4">
-          
             <div>
               <Label
                 htmlFor="companyName"
@@ -73,7 +77,6 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
                 value={companyDetails.companyName}
                 onChange={handleChange}
                 required
-                
               />
             </div>
 
@@ -91,9 +94,12 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
                 onChange={handleChange}
                 required
               />
-               <div className=" absolute inset-y-0 right-9 -top-6 flex items-center pointer-events-none">
-                  <Icon icon="weui:location-outlined" className="hidden lg:block" />
-                </div>
+              <div className=" absolute inset-y-0 right-9 -top-3 flex items-center pointer-events-none">
+                <Icon
+                  icon="weui:location-outlined"
+                  className="hidden lg:block"
+                />
+              </div>
             </div>
 
             <div>
@@ -107,10 +113,7 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
                 onChange={handleDateChange}
                 className="w-full border-gray-300 rounded-md shadow-sm "
               />
-             
             </div>
-
-          
 
             <div>
               <Label
@@ -128,17 +131,11 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
               />
             </div>
 
-            
-
-
-
             <div className="flex justify-center py-4">
               <Button
                 className="text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-6 h-10 flex items-center"
                 onClick={() => {
-                  // Save logic
-                  console.log(companyDetails);
-                  onCloseModal();
+                  addCompanyApi()
                 }}
               >
                 Save
