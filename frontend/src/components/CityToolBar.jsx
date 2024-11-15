@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import AddCompanyModal from "./Modals/AddCompanyModal";
 
-const CityFilterBar = ({openModal, setOpenModal}) => {
-  const [selectedSort, setSelectedSort] = useState("Name");
+const CityFilterBar = ({ openModal, setOpenModal, filterFromCities,setSelectedSort,selectedSort }) => {
+  const [searchedCity, setSearchedCity] = useState("");
 
   const handleSortChange = (e) => {
     setSelectedSort(e.target.value);
   };
+
+  useEffect(()=>{
+   if(searchedCity === ""){
+    filterFromCities(searchedCity)
+   }
+  },[searchedCity])
 
   return (
     <>
@@ -20,6 +27,10 @@ const CityFilterBar = ({openModal, setOpenModal}) => {
               </label>
               <div className="flex items-center">
                 <input
+                  value={searchedCity}
+                  onChange={(e) => {
+                    setSearchedCity(e.target.value);
+                  }}
                   type="text"
                   className="h-10 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md pl-4 pr-10 focus:ring-[#D100F3] focus:border-[#D100F3]"
                   placeholder="Select City"
@@ -31,6 +42,12 @@ const CityFilterBar = ({openModal, setOpenModal}) => {
             </div>
 
             <button
+              onClick={() => 
+                {
+                  filterFromCities(searchedCity)
+                  
+                }
+              }
               type="button"
               className="text-white mt-4 sm:mt-0 bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-4 py-2 whitespace-nowrap"
             >
@@ -41,7 +58,7 @@ const CityFilterBar = ({openModal, setOpenModal}) => {
           <div className="col-span-1 sm:col-span-5 flex flex-col sm:flex-row items-center sm:items-end justify-evenly gap-4 mt-4 sm:mt-0">
             {/* Add Company Button */}
             <button
-              onClick={()=>setOpenModal(true)}
+              onClick={() => setOpenModal(true)}
               type="button"
               className="text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-4 py-2 flex items-center gap-1 w-full sm:w-auto "
             >

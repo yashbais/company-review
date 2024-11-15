@@ -5,12 +5,10 @@ import { useState } from "react";
 import { Datepicker } from "flowbite-react";
 import { Icon } from "@iconify/react";
 import { addCompany } from "../../store/Apis";
-import {useContext} from 'react'
-import { companyList } from "../../context/context";
+
 
 
 const AddCompanyModal = ({ setOpenModal, openModal }) => {
-  const contextCompanies = useContext(companyList)
 
 
   const [companyDetails, setCompanyDetails] = useState({
@@ -115,7 +113,9 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
                 className="text-gray-500 font-medium"
               />
               <Datepicker
-                selected={companyDetails.companyFoundedOn}
+                              placeholder="DD/MM/YYYY"
+
+                value={companyDetails.companyFoundedOn }
                 onChange={handleDateChange}
                 className="w-full border-gray-300 rounded-md shadow-sm "
               />
