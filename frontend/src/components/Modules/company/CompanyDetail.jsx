@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { Button } from "flowbite-react";
-import { getCompany } from "../store/Apis.js";
-import AddReviewModal from "./Modals/AddReviewModal";
+import { getCompany } from "../../../store/Apis.js";
+import AddReviewModal from "../../Modals/AddReviewModal.jsx";
 
 
 const CompanyDetail = () => {

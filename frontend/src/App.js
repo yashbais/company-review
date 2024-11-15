@@ -1,5 +1,5 @@
 
-import CompanySection from './components/CompanySection.jsx'
+import CompanySection from './components/Modules/company/CompanySection'
 
 function App() {
 

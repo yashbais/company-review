@@ -5,15 +5,14 @@ import { useState } from "react";
 import { Datepicker } from "flowbite-react";
 import { Icon } from "@iconify/react";
 import { addCompany } from "../../store/Apis";
-
-
+import addCompanySchema from "../../schema/addCompanySchema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const AddCompanyModal = ({ setOpenModal, openModal }) => {
-
-
   const [companyDetails, setCompanyDetails] = useState({
     companyName: "",
-    companyFoundedOn: null, 
+    companyFoundedOn: null,
     location: "",
     city: "",
   });
@@ -26,21 +25,37 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
       location: "",
       city: "",
     });
-    
+    reset({
+      companyName: "",
+      companyFoundedOn: null,
+      location: "",
+      city: "",
+    })
   }
-
-  const handleChange = (e) => {
-    setCompanyDetails({ ...companyDetails, [e.target.name]: e.target.value });
-  };
+ 
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+    watch,
+    setValue,
+    reset
+  } = useForm({
+    resolver: yupResolver(addCompanySchema),
+    defaultValues: companyDetails,
+  });
 
   const handleDateChange = (date) => {
-    setCompanyDetails({ ...companyDetails, companyFoundedOn: date });
+    setValue("companyFoundedOn", date); // Update the value of companyFoundedOn in form state
   };
 
-  const addCompanyApi = async ()=>{
-    await addCompany({...companyDetails})
+
+  const watchValues = watch();
+
+  const addCompanyApi = async () => {
+    await addCompany({ ...watchValues });
     onCloseModal();
-  }
+  };
 
   return (
     <>
@@ -67,87 +82,92 @@ const AddCompanyModal = ({ setOpenModal, openModal }) => {
         </div>
 
         <Modal.Body>
-          <div className="space-y-4">
-            <div>
-              <Label
-                htmlFor="companyName"
-                value="Company Name"
-                className="text-gray-500 font-medium"
-              />
-              <TextInput
-                id="companyName"
-                name="companyName"
-                placeholder="Enter company name..."
-                value={companyDetails.companyName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <Label
-                htmlFor="location"
-                value="Location"
-                className="text-gray-500 font-medium"
-              />
-              <TextInput
-                id="location"
-                name="location"
-                placeholder="Enter location..."
-                value={companyDetails.location}
-                onChange={handleChange}
-                required
-              />
-              <div className=" absolute inset-y-0 right-9 -top-3 flex items-center pointer-events-none">
-                <Icon
-                  icon="weui:location-outlined"
-                  className="hidden lg:block"
+          <form onSubmit={handleSubmit(addCompanyApi)}>
+            <div className="space-y-4">
+              <div>
+                <Label
+                  htmlFor="companyName"
+                  value="Company Name"
+                  className="text-gray-500 font-medium"
                 />
+                <TextInput
+                  {...register("companyName")}
+                  id="companyName"
+                  name="companyName"
+                  placeholder="Enter company name..."
+                />
+                <p className="text-rose-300 text-sm">
+                  {errors.companyName?.message}
+                </p>
+              </div>
+
+              <div>
+                <Label
+                  htmlFor="location"
+                  value="Location"
+                  className="text-gray-500 font-medium"
+                />
+                <TextInput
+                  id="location"
+                  name="location"
+                  placeholder="Enter location..."
+                  {...register("location")}
+                />
+                <div className=" absolute inset-y-0 right-9 -top-3 flex items-center pointer-events-none">
+                  <Icon
+                    icon="weui:location-outlined"
+                    className="hidden lg:block"
+                  />
+                </div>
+                <p className="text-rose-300 text-sm">
+                  {errors.location?.message}
+                </p>
+              </div>
+
+              <div>
+                <Label
+                  htmlFor="companyFoundedOn"
+                  value="Founded On"
+                  className="text-gray-500 font-medium"
+                />
+                <Datepicker
+                  name="companyFoundedOn"
+                  placeholder="DD/MM/YYYY"
+                  selected={watchValues?.companyFoundedOn}
+                  value={watchValues?.companyFoundedOn}
+                  onChange={handleDateChange} 
+                  className="w-full border-gray-300 rounded-md shadow-sm "
+                />
+                <p className="text-rose-300 text-sm">
+                  {errors.companyFoundedOn?.message}
+                </p>
+              </div>
+
+              <div>
+                <Label
+                  htmlFor="city"
+                  value="City"
+                  className="text-gray-500 font-medium"
+                />
+                <TextInput
+                  id="city"
+                  name="city"
+                  placeholder="Enter city..."
+                  {...register("city")}
+                />
+                <p className="text-rose-300 text-sm">{errors.city?.message}</p>
+              </div>
+
+              <div className="flex justify-center py-4">
+                <Button
+                  className="text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-6 h-10 flex items-center"
+                  type="submit"
+                >
+                  Save
+                </Button>
               </div>
             </div>
-
-            <div>
-              <Label
-                htmlFor="companyFoundedOn"
-                value="Founded On"
-                className="text-gray-500 font-medium"
-              />
-              <Datepicker
-                              placeholder="DD/MM/YYYY"
-
-                value={companyDetails.companyFoundedOn }
-                onChange={handleDateChange}
-                className="w-full border-gray-300 rounded-md shadow-sm "
-              />
-            </div>
-
-            <div>
-              <Label
-                htmlFor="city"
-                value="City"
-                className="text-gray-500 font-medium"
-              />
-              <TextInput
-                id="city"
-                name="city"
-                placeholder="Enter city..."
-                value={companyDetails.city}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="flex justify-center py-4">
-              <Button
-                className="text-white bg-gradient-to-br from-[#D100F3] to-[#002BC5] font-medium rounded-md text-sm px-6 h-10 flex items-center"
-                onClick={() => {
-                  addCompanyApi()
-                }}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
+          </form>
         </Modal.Body>
       </Modal>
     </>

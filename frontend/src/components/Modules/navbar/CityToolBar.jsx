@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import AddCompanyModal from "./Modals/AddCompanyModal";
+import AddCompanyModal from "../../Modals/AddCompanyModal";
 
 const CityFilterBar = ({ openModal, setOpenModal, filterFromCities,setSelectedSort,selectedSort }) => {
   const [searchedCity, setSearchedCity] = useState("");
